@@ -9,10 +9,14 @@
 ## 2. Aggiungi le 4 azioni «Crea nota» (una volta sola)
 iOS non permette di scegliere la cartella di Note da una variabile, quindi va fatto a mano.
 Apri il Comando Rapido. In fondo c'è il menu «Dove salvo il memo?». In ognuno dei rami Lavoro, Tempo Libero, Idee e Varie c'è un commento «AGGIUNGI QUI».
-1. Cerca l'azione **Crea nota** (app Note) e trascinala sotto il commento.
-2. Nel campo del contenuto metti la variabile **Testo nota**.
-3. Tocca **Cartella** e scegli la cartella del ramo.
-4. Cancella il commento (facoltativo).
+**Primo ramo (Lavoro):**
+1. Tocca **Cerca azioni**, in basso, e scrivi `Crea nota`.
+2. Tieni premuto il risultato **Crea nota** (icona gialla di Note) e, senza staccare il dito, trascinalo subito sotto il commento giallo del ramo **Lavoro**, prima della riga «Tempo Libero». Se lo tocchi soltanto, finisce in fondo al comando: in quel caso tienilo premuto e trascinalo su.
+3. Nell'azione tocca il campo blu del contenuto (il testo della nota), poi **Seleziona variabile**, poi tocca più in alto l'azione **Testo nota**, quella che inizia con Titolo e Struttura.
+4. Tocca la freccia **>** dell'azione per vedere tutti i campi. Tocca **Cartella** e scegli **Lavoro**.
+5. Facoltativo: elimina il commento giallo con la **X**.
+
+**Gli altri 3 rami, più in fretta:** tieni premuta l'azione «Crea nota» appena fatta → **Duplica**. Trascina la copia sotto il commento di **Tempo Libero** e cambia solo la cartella. Ripeti per **Idee** e **Varie**.
 
 Le 4 cartelle devono esistere già in Note.
 
