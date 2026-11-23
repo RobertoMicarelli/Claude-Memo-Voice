@@ -32,8 +32,9 @@ Un Comando Rapido iOS che, avviato dalla schermata di blocco, fa queste cose:
 8. **Salvataggio** nella repo `RobertoMicarelli/Claude-Memo-Voice`, creata privata e poi resa pubblica su richiesta. Controllo preliminare: nessuna chiave e nessun audio, email dei commit noreply.
 9. **GitHub Pages** attivato su `main`. Il visualizzatore è online e l'indirizzo è aggiornato nel Comando Rapido.
 10. **Crash all'import:** Comandi Rapidi si apriva e si chiudeva subito, sia su iPhone sia su Mac. Corretto il formato del campo `file` nella chiamata di trascrizione.
-11. **Prima prova reale su iPhone riuscita:** trascrizione, pulizia e salvataggio in Note funzionano. Il link alla mappa però si spezzava. La nota ora è rich text con un link vero (100 azioni).
-12. **Aggiunta la cartella Casa:** ora il menu ha 5 cartelle più «Non salvare», e il Comando Rapido ha 102 azioni.
+11. **Prima prova reale su iPhone riuscita:** trascrizione, pulizia e salvataggio in Note funzionano. Il link alla mappa però si spezzava. 
+12. **Aggiunta la cartella Casa:** ora il menu ha 5 cartelle più «Non salvare».
+13. **Rich text abbandonato:** la nota arrivava vuota. Si torna al testo semplice, con la mappa codificata a segmenti, ora riconosciuta come link completo (98 azioni).
 
 ## Decisioni (2026-11-23)
 - **Comando Rapido e non app nativa.** Le app di terze parti non possono scrivere in Note. In più il Mac è Intel e un account sviluppatore costerebbe 99 $ l'anno.
@@ -110,10 +111,11 @@ Nessuna.
   - **Causa:** il log del Mac (`log show --predicate 'process == "Shortcuts"'`) riporta `State for WFPropertyListParameterValue is not of the expected class` in `WFDictionaryParameterKeyValuePair`. Il campo `file` del modulo (WFItemType 5) era serializzato come semplice `WFTextTokenAttachment`.
   - **Correzione:** va avvolto in `{"Value": …, "WFSerializationType": "WFTokenAttachmentParameterState"}`.
   - **Verifica:** il Mac riapre il file senza crash. Come verificare in futuro: `open shortcut/Memo_AI.shortcut` sul Mac e controllare il log, perché sul Mac il problema si riproduce come sull'iPhone.
-- **Link alla mappa non cliccabile per intero (2026-11-23, prima prova su iPhone).** In una nota di testo semplice, Note riconosceva come link solo `https://…/viewer` e lasciava fuori `/#…`. Il link incollato a mano nel browser funzionava, quindi visualizzatore e contenuto erano corretti.
-  - **Correzione:** la nota ora è rich text costruito da HTML («Crea rich text da HTML», parametro `WFHTML`), con un vero `<a href>` «Apri la mappa mentale».
-  - **Accorgimenti:** il testo viene prima protetto da `& < >` e i ritorni a capo diventano `<br>`. Indirizzo e base64 vengono ripuliti da eventuali spazi.
-  - **Verifica:** sul Mac, con `textutil`, il link esce completo e identico all'originale. Il file si apre senza crash. Manca ancora la verifica su iPhone.
+- **Link alla mappa non cliccabile per intero (2026-11-23, prima prova su iPhone).** In una nota di testo semplice, Note riconosceva come link solo `https://…/viewer` e lasciava fuori `/#…`. Il link incollato a mano nel browser funzionava.
+  - **Primo tentativo, fallito:** nota in rich text costruito da HTML («Crea rich text da HTML»). Note creava la nota nella cartella giusta ma **vuota**, e chiedeva il nome perché non aveva testo da cui ricavarlo. Strada abbandonata: non riprovarla.
+  - **Causa reale:** riprodotta sul Mac con `NSDataDetector`, via JXA (`osascript -l JavaScript`). Il riconoscimento link di Apple scarta una stringa base64 lunga e senza interruzioni.
+  - **Correzione:** base64 «url-safe» (`+`→`-`, `/`→`_`, senza `=`), spezzato ogni 48 caratteri con un punto (regex `(.{48})` → `$1.`). Il visualizzatore ignora i punti.
+  - **Verifica:** con gli stessi motori di Apple (NSRegularExpression + NSDataDetector) il link è riconosciuto completo, sia sulla mappa breve (481 caratteri) sia su quella lunga (1.174). La mappa si apre nel visualizzatore.
 - Il database dei Comandi Rapidi (`~/Library/Shortcuts`) non è leggibile dal terminale per via della protezione TCC. Gli identificativi di Note sono stati presi dai metadati App Intents di Note.app.
 
 ## Cosa NON è stato toccato

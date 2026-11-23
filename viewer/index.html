@@ -32,7 +32,7 @@
   }
 
   function decodifica(frammento) {
-    let b64 = decodeURIComponent(frammento).replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/');
+    let b64 = decodeURIComponent(frammento).replace(/[\s.~]+/g, '').replace(/-/g, '+').replace(/_/g, '/');
     while (b64.length % 4) b64 += '=';
     const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
     return new TextDecoder('utf-8').decode(bytes);

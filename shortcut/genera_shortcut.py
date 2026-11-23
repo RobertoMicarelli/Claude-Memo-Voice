@@ -218,8 +218,10 @@ B64 = (uid(), "Mappa base64")
 add("is.workflow.actions.base64encode", {
     "WFInput": var(*MM), "WFEncodeMode": "Encode", "WFBase64LineBreakMode": "None",
     "CustomOutputName": B64[1]}, B64[0])
-# La nota è rich text costruito da HTML: il link alla mappa è un vero <a href>.
-# In testo semplice Note riconosceva solo "https://.../viewer" e perdeva il "#...".
+# La nota è testo semplice (il rich text da HTML arriva vuoto in Note).
+# Il riconoscimento link di Apple scarta stringhe codificate lunghe e senza
+# interruzioni: la mappa va in base64 "url-safe" spezzato ogni 48 caratteri
+# con un punto. Verificato con NSDataDetector; il visualizzatore ignora i punti.
 
 
 def sostituisci(ingresso, cerca, con, nome, regex=False):
@@ -232,29 +234,17 @@ def sostituisci(ingresso, cerca, con, nome, regex=False):
     return u
 
 
-SEGNAPOSTO = "§MAPPA§"
-P = (uid(), "Testo semplice")
-add("is.workflow.actions.gettext", {
-    "WFTextActionText": testo(TIT, "\n\n", ST, f"\n\n{SEGNAPOSTO}\n\nTESTO COMPLETO\n", TP),
-    "CustomOutputName": P[1]}, P[0])
-P1 = sostituisci(P, "&", "&amp;", "Testo html 1")
-P2 = sostituisci(P1, "<", "&lt;", "Testo html 2")
-P3 = sostituisci(P2, ">", "&gt;", "Testo html 3")
-P4 = sostituisci(P3, "\n", "<br>", "Testo html 4")
 VC = sostituisci(V, r"\s+", "", "Indirizzo pulito", regex=True)
-BC = sostituisci(B64, r"\s+", "", "Mappa base64 pulita", regex=True)
-LINK = (uid(), "Link mappa")
-add("is.workflow.actions.gettext", {
-    "WFTextActionText": testo('<b>MAPPA MENTALE</b><br><a href="', VC, "#", BC,
-                              '">Apri la mappa mentale</a>'),
-    "CustomOutputName": LINK[1]}, LINK[0])
-P5 = sostituisci(P4, SEGNAPOSTO, LINK, "Testo html 5")
-H = (uid(), "HTML nota")
-add("is.workflow.actions.gettext", {
-    "WFTextActionText": testo('<html><head><meta charset="utf-8"></head><body>', P5, "</body></html>"),
-    "CustomOutputName": H[1]}, H[0])
+M1 = sostituisci(B64, r"\s+", "", "Mappa 1", regex=True)
+M2 = sostituisci(M1, "+", "-", "Mappa 2")
+M3 = sostituisci(M2, "/", "_", "Mappa 3")
+M4 = sostituisci(M3, "=", "", "Mappa 4")
+BC = sostituisci(M4, "(.{48})", "$1.", "Mappa per link", regex=True)
 NB = (uid(), "Testo nota")
-add("is.workflow.actions.getrichtextfromhtml", {"WFHTML": testo(H), "CustomOutputName": NB[1]}, NB[0])
+add("is.workflow.actions.gettext", {
+    "WFTextActionText": testo(TIT, "\n\n", ST, "\n\nMAPPA MENTALE\n", VC, "#", BC,
+                              "\n\nTESTO COMPLETO\n", TP),
+    "CustomOutputName": NB[1]}, NB[0])
 
 # --- 5. Menu cartella --------------------------------------------------------------
 g = uid()
@@ -268,7 +258,7 @@ for v in voci:
     if v == "Non salvare":
         add("is.workflow.actions.showresult", {"Text": testo(NB)})
     else:
-        commento(f"AGGIUNGI QUI: «Crea nota» → Contenuto: variabile «Testo nota» → Cartella: {v}")
+        commento(f"AGGIUNGI QUI: «Crea nota» → Contenuto: variabile «Testo nota» → Nome: vuoto → Cartella: {v} → «Apri in caso di esecuzione» disattivato")
 add("is.workflow.actions.choosefrommenu", {"GroupingIdentifier": g, "WFControlFlowMode": 2})
 
 workflow = {
