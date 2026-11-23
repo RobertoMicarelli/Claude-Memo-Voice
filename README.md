@@ -5,7 +5,7 @@ Un Comando Rapido iOS che, avviato dalla schermata di blocco, fa queste cose:
 - registra la voce;
 - la trascrive con OpenAI;
 - la fa ripulire da un modello GPT a blocchi di circa 300 parole, poi ne ricava la struttura da memo e la mappa mentale markmap;
-- se lo scegli dal menu finale, salva la nota in una cartella di Note (Lavoro, Tempo Libero, Idee o Varie).
+- se lo scegli dal menu finale, salva la nota in una cartella di Note (Casa, Lavoro, Tempo Libero, Idee o Varie, sottocartelle di NOTE-PEBBLE).
 
 ## Cronologia del lavoro (2026-11-23)
 1. **Richiesta iniziale.** App iPhone attivata con volume giù + tasto laterale. Registra con Memo Vocali, passa la trascrizione a ChatGPT e produce testo pulito, struttura e mappa markmap. Salva in Note per cartella.
@@ -33,12 +33,13 @@ Un Comando Rapido iOS che, avviato dalla schermata di blocco, fa queste cose:
 9. **GitHub Pages** attivato su `main`. Il visualizzatore è online e l'indirizzo è aggiornato nel Comando Rapido.
 10. **Crash all'import:** Comandi Rapidi si apriva e si chiudeva subito, sia su iPhone sia su Mac. Corretto il formato del campo `file` nella chiamata di trascrizione.
 11. **Prima prova reale su iPhone riuscita:** trascrizione, pulizia e salvataggio in Note funzionano. Il link alla mappa però si spezzava. La nota ora è rich text con un link vero (100 azioni).
+12. **Aggiunta la cartella Casa:** ora il menu ha 5 cartelle più «Non salvare», e il Comando Rapido ha 102 azioni.
 
 ## Decisioni (2026-11-23)
 - **Comando Rapido e non app nativa.** Le app di terze parti non possono scrivere in Note. In più il Mac è Intel e un account sviluppatore costerebbe 99 $ l'anno.
 - **Avvio dal pulsante sulla schermata di blocco.** Volume giù + tasto laterale è riservato a iOS: nessuna app lo può intercettare.
 - **Trascrizione OpenAI (`gpt-4o-transcribe`) e non Memo Vocali.** Memo Vocali non espone la trascrizione a nessuna API.
-- **Cartella scelta da un menu a fine registrazione.** In «Crea nota» la cartella è un'entità che non accetta variabili, verificato in `Notes.app/.../extract.actionsdata`. Per questo ci sono 4 rami con l'azione aggiunta a mano.
+- **Cartella scelta da un menu a fine registrazione.** In «Crea nota» la cartella è un'entità che non accetta variabili, verificato in `Notes.app/.../extract.actionsdata`. Per questo ci sono 5 rami, ciascuno con l'azione aggiunta a mano.
 - **Mappa mentale tramite pagina statica `viewer/index.html`.** Il markdown viaggia in base64 nel frammento `#` dell'URL, che non viene mai inviato al server. Le Note non possono mostrare markmap.
 - **Modello di pulizia da scegliere con `test/prova_api.py`.** Scelto `gpt-4.1-mini` (2026-11-23): costo pari a gpt-5-mini, mappe più gerarchiche.
 - **Pulizia a blocchi (2026-11-23).** Le righe della trascrizione si accumulano finché superano 300 parole; ogni blocco si ripulisce con una chiamata a parte. Poi una chiamata finale ricava titolo, struttura e mappa dal testo pulito. Così la completezza è garantita dalla logica e non dal prompt.

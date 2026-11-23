@@ -6,9 +6,9 @@
    - **API key di OpenAI**: incollala qui. Resta solo dentro il Comando Rapido.
    - **Indirizzo del visualizzatore mappe**: lascia il valore proposto (`https://robertomicarelli.github.io/Claude-Memo-Voice/viewer/`).
 
-## 2. Aggiungi le 4 azioni «Crea nota» (una volta sola)
+## 2. Aggiungi le 5 azioni «Crea nota» (una volta sola)
 iOS non permette di scegliere la cartella di Note da una variabile, quindi va fatto a mano.
-Apri il Comando Rapido. In fondo c'è il menu «Dove salvo il memo?». In ognuno dei rami Lavoro, Tempo Libero, Idee e Varie c'è un commento «AGGIUNGI QUI».
+Apri il Comando Rapido. In fondo c'è il menu «Dove salvo il memo?». In ognuno dei rami Casa, Lavoro, Tempo Libero, Idee e Varie c'è un commento «AGGIUNGI QUI».
 **Primo ramo (Lavoro):**
 1. Tocca **Cerca azioni**, in basso, e scrivi `Crea nota`.
 2. Tieni premuto il risultato **Crea nota** (icona gialla di Note) e, senza staccare il dito, trascinalo subito sotto il commento giallo del ramo **Lavoro**, prima della riga «Tempo Libero». Se lo tocchi soltanto, finisce in fondo al comando: in quel caso tienilo premuto e trascinalo su.
@@ -16,9 +16,9 @@ Apri il Comando Rapido. In fondo c'è il menu «Dove salvo il memo?». In ognuno
 4. Tocca la freccia **>** dell'azione per vedere tutti i campi. Tocca **Cartella** e scegli **Lavoro**.
 5. Facoltativo: elimina il commento giallo con la **X**.
 
-**Gli altri 3 rami, più in fretta:** tieni premuta l'azione «Crea nota» appena fatta → **Duplica**. Trascina la copia sotto il commento di **Tempo Libero** e cambia solo la cartella. Ripeti per **Idee** e **Varie**.
+**Gli altri 4 rami, più in fretta:** tieni premuta l'azione «Crea nota» appena fatta → **Duplica**. Trascina la copia sotto il commento di **Tempo Libero** e cambia solo la cartella. Ripeti per **Idee**, **Varie** e **Casa**.
 
-Le 4 cartelle devono esistere già in Note.
+Le 5 cartelle devono esistere già in Note. Se sono sottocartelle, come quelle dentro NOTE-PEBBLE, all'inizio il selettore mostra solo le cartelle principali: usa il campo **Cerca** in alto e scrivi il nome, per esempio `IDEE`.
 
 ## 3. Pulsante sulla schermata di blocco (iOS 18 o successivi)
 Tieni premuto sulla schermata di blocco → **Personalizza** → **Schermata di blocco**. Tocca uno dei due pulsanti in basso → **Comandi Rapidi** → **Memo AI**.

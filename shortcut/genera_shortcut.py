@@ -18,7 +18,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 MODELLO = sys.argv[1] if len(sys.argv) > 1 else "gpt-4.1-mini"
 TRASCRIZIONE = "gpt-4o-transcribe"
-CARTELLE = ["Lavoro", "Tempo Libero", "Idee", "Varie"]
+CARTELLE = ["Casa", "Lavoro", "Tempo Libero", "Idee", "Varie"]
 
 azioni = []
 
