@@ -4,7 +4,7 @@
 1. Manda `shortcut/Memo_AI.shortcut` all'iPhone (AirDrop, oppure iCloud Drive → app File → tocca il file).
 2. Tocca **Aggiungi comando rapido**. Ti chiede:
    - **API key di OpenAI**: incollala qui. Resta solo dentro il Comando Rapido.
-   - **Indirizzo del visualizzatore mappe**: lascia il valore proposto finché non lo pubblichiamo; poi lo cambi nella seconda azione «Testo».
+   - **Indirizzo del visualizzatore mappe**: lascia il valore proposto (`https://robertomicarelli.github.io/Claude-Memo-Voice/viewer/`).
 
 ## 2. Aggiungi le 4 azioni «Crea nota» (una volta sola)
 iOS non permette di scegliere la cartella di Note da una variabile, quindi va fatto a mano.

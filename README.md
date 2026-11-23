@@ -29,7 +29,8 @@ Un Comando Rapido iOS che, avviato dalla schermata di blocco, fa queste cose:
 
    Correzioni: regola esplicita nel prompt e vocabolario dei nomi.
 7. **Pulizia a blocchi**, cioè blocchi di circa 300 parole più una chiamata finale per la struttura. Il testo pulito arriva all'89%. Il Comando Rapido è stato rigenerato (90 azioni) e controllato strutturalmente.
-8. **Salvataggio** nella repo privata `RobertoMicarelli/Claude-Memo-Voice`.
+8. **Salvataggio** nella repo `RobertoMicarelli/Claude-Memo-Voice`, creata privata e poi resa pubblica su richiesta. Controllo preliminare: nessuna chiave e nessun audio, email dei commit noreply.
+9. **GitHub Pages** attivato su `main`. Il visualizzatore è online e l'indirizzo è aggiornato nel Comando Rapido.
 
 ## Decisioni (2026-11-23)
 - **Comando Rapido e non app nativa.** Le app di terze parti non possono scrivere in Note. In più il Mac è Intel e un account sviluppatore costerebbe 99 $ l'anno.
@@ -73,7 +74,7 @@ shortcuts sign --mode anyone --input shortcut/Memo_AI_unsigned.shortcut --output
   - **gpt-4.1-mini:** 7,4 s, 641 token in ingresso e 337 in uscita, con una mappa più gerarchica.
   - Risultati completi in `test/risultati/`.
   - Manca ancora la prova su una registrazione reale.
-- **Non fatto:** la pubblicazione del visualizzatore (serve un URL https, per esempio GitHub Pages).
+- **Visualizzatore online** su GitHub Pages: `https://robertomicarelli.github.io/Claude-Memo-Voice/viewer/`, già impostato come valore predefinito nel Comando Rapido.
 
 ### Test sul memo reale
 - **Memo reale di 14 minuti (2026-11-23, registrazione di Memo Vocali in `test/audio/`, esclusa dal repo; dialogo dimostrativo).**
@@ -105,4 +106,4 @@ Nessuna.
 - Il database dei Comandi Rapidi (`~/Library/Shortcuts`) non è leggibile dal terminale per via della protezione TCC. Gli identificativi di Note sono stati presi dai metadati App Intents di Note.app.
 
 ## Cosa NON è stato toccato
-La libreria dei Comandi Rapidi e le Note: non è stato importato né creato nulla. Il Comando Rapido a blocchi non è mai stato eseguito su un dispositivo. Nessun servizio esterno oltre a OpenAI (test) e GitHub (repo privata). Audio, trascrizioni e risultati dei test restano solo in locale (`test/audio/`, `test/risultati/`, in `.gitignore`).
+La libreria dei Comandi Rapidi e le Note: non è stato importato né creato nulla. Il Comando Rapido a blocchi non è mai stato eseguito su un dispositivo. Nessun servizio esterno oltre a OpenAI (test) e GitHub (repo pubblica + Pages). Audio, trascrizioni e risultati dei test restano solo in locale (`test/audio/`, `test/risultati/`, in `.gitignore`).

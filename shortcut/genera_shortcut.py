@@ -105,7 +105,7 @@ commento("MEMO AI — registra, trascrive (OpenAI), pulisce e salva in Note.\n"
 K = (uid(), "Chiave API")
 i_chiave = add("is.workflow.actions.gettext", {"WFTextActionText": "", "CustomOutputName": K[1]}, K[0])
 V = (uid(), "Visualizzatore")
-i_viewer = add("is.workflow.actions.gettext", {"WFTextActionText": "https://TUO-UTENTE.github.io/memo-mappa/", "CustomOutputName": V[1]}, V[0])
+i_viewer = add("is.workflow.actions.gettext", {"WFTextActionText": "https://robertomicarelli.github.io/Claude-Memo-Voice/viewer/", "CustomOutputName": V[1]}, V[0])
 
 # --- 1. Registrazione -----------------------------------------------------------
 A = (uid(), "Audio")
@@ -252,8 +252,8 @@ workflow = {
         {"ActionIndex": i_chiave, "Category": "Parameter", "ParameterKey": "WFTextActionText",
          "Text": "Incolla la tua API key di OpenAI", "DefaultValue": ""},
         {"ActionIndex": i_viewer, "Category": "Parameter", "ParameterKey": "WFTextActionText",
-         "Text": "Indirizzo del visualizzatore mappe (lascia così se non l'hai ancora)",
-         "DefaultValue": "https://TUO-UTENTE.github.io/memo-mappa/"},
+         "Text": "Indirizzo del visualizzatore mappe (lascia così)",
+         "DefaultValue": "https://robertomicarelli.github.io/Claude-Memo-Voice/viewer/"},
     ],
     "WFWorkflowActions": azioni,
 }
