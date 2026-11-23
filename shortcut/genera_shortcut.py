@@ -66,7 +66,7 @@ def campi(voci):
     """voci = lista di (chiave, valore, tipo) con tipo 0 testo, 5 file."""
     items = []
     for k, v, t in voci:
-        items.append({"WFItemType": t, "WFKey": testo(k), "WFValue": v if t == 5 else (testo(*v) if isinstance(v, tuple) else testo(v))})
+        items.append({"WFItemType": t, "WFKey": testo(k), "WFValue": {"Value": v, "WFSerializationType": "WFTokenAttachmentParameterState"} if t == 5 else (testo(*v) if isinstance(v, tuple) else testo(v))})
     return {"Value": {"WFDictionaryFieldValueItems": items}, "WFSerializationType": "WFDictionaryFieldValue"}
 
 

@@ -31,6 +31,7 @@ Un Comando Rapido iOS che, avviato dalla schermata di blocco, fa queste cose:
 7. **Pulizia a blocchi**, cioè blocchi di circa 300 parole più una chiamata finale per la struttura. Il testo pulito arriva all'89%. Il Comando Rapido è stato rigenerato (90 azioni) e controllato strutturalmente.
 8. **Salvataggio** nella repo `RobertoMicarelli/Claude-Memo-Voice`, creata privata e poi resa pubblica su richiesta. Controllo preliminare: nessuna chiave e nessun audio, email dei commit noreply.
 9. **GitHub Pages** attivato su `main`. Il visualizzatore è online e l'indirizzo è aggiornato nel Comando Rapido.
+10. **Crash all'import:** Comandi Rapidi si apriva e si chiudeva subito, sia su iPhone sia su Mac. Corretto il formato del campo `file` nella chiamata di trascrizione.
 
 ## Decisioni (2026-11-23)
 - **Comando Rapido e non app nativa.** Le app di terze parti non possono scrivere in Note. In più il Mac è Intel e un account sviluppatore costerebbe 99 $ l'anno.
@@ -103,6 +104,10 @@ Nessuna.
 ## Revisioni e incidenti
 - Il pannello browser di Claude apre i file locali come `data:` e perde il frammento `#`. Il visualizzatore si testa con `python3 -m http.server 8765` dentro `viewer/`.
 - `shortcuts sign` stampa righe «ERROR: Unrecognized attribute string flag». Sono innocue: il file firmato viene prodotto lo stesso.
+- **Crash all'import del Comando Rapido (2026-11-23).** Comandi Rapidi si apriva e si chiudeva subito.
+  - **Causa:** il log del Mac (`log show --predicate 'process == "Shortcuts"'`) riporta `State for WFPropertyListParameterValue is not of the expected class` in `WFDictionaryParameterKeyValuePair`. Il campo `file` del modulo (WFItemType 5) era serializzato come semplice `WFTextTokenAttachment`.
+  - **Correzione:** va avvolto in `{"Value": …, "WFSerializationType": "WFTokenAttachmentParameterState"}`.
+  - **Verifica:** il Mac riapre il file senza crash. Come verificare in futuro: `open shortcut/Memo_AI.shortcut` sul Mac e controllare il log, perché sul Mac il problema si riproduce come sull'iPhone.
 - Il database dei Comandi Rapidi (`~/Library/Shortcuts`) non è leggibile dal terminale per via della protezione TCC. Gli identificativi di Note sono stati presi dai metadati App Intents di Note.app.
 
 ## Cosa NON è stato toccato
