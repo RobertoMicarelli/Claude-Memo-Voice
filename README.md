@@ -35,6 +35,10 @@ Un Comando Rapido iOS che, avviato dalla schermata di blocco, fa queste cose:
 11. **Prima prova reale su iPhone riuscita:** trascrizione, pulizia e salvataggio in Note funzionano. Il link alla mappa però si spezzava. 
 12. **Aggiunta la cartella Casa:** ora il menu ha 5 cartelle più «Non salvare».
 13. **Rich text abbandonato:** la nota arrivava vuota. Si torna al testo semplice, con la mappa codificata a segmenti, ora riconosciuta come link completo (98 azioni).
+14. **Mappa sempre su sfondo bianco**, anche con il telefono in modalità scura.
+15. **Comando diviso in due:** `Memo_AI_Motore`, testabile sul Mac con `shortcuts run`, e `Memo_AI`, che registra, mostra il menu e salva in Note e si configura una volta sola.
+16. **Primo test sul Mac**, che ha trovato il bug degli accenti (vedi Revisioni e incidenti).
+17. **Corretta la gestione del silenzio e degli errori.** Verificato sul Mac: silenzio, memo breve (3 esecuzioni), memo breve con silenzi, memo lungo.
 
 ## Decisioni (2026-11-23)
 - **Comando Rapido e non app nativa.** Le app di terze parti non possono scrivere in Note. In più il Mac è Intel e un account sviluppatore costerebbe 99 $ l'anno.
@@ -56,15 +60,19 @@ Un Comando Rapido iOS che, avviato dalla schermata di blocco, fa queste cose:
 | `viewer/index.html` | Visualizzatore markmap (d3 7.9.0, markmap 0.18.12) |
 | `test/prova_api.py` | Test end-to-end con la stessa logica a blocchi del Comando Rapido; legge la chiave da `.env`; `--riusa` salta la trascrizione già salvata |
 | `test/audio/prova1.m4a` | Audio sintetico di prova con intercalari (escluso da git) |
-| `shortcut/genera_shortcut.py` | Genera `Memo_AI_unsigned.shortcut` |
-| `shortcut/Memo_AI.shortcut` | Versione firmata (`shortcuts sign --mode anyone`) da importare |
+| `shortcut/genera_shortcut.py` | Genera `Memo_AI_Motore_unsigned.shortcut` e `Memo_AI_unsigned.shortcut` |
+| `shortcut/controlla_shortcut.py` | Controllo strutturale dei file generati |
+| `shortcut/Memo_AI_Motore.shortcut`, `shortcut/Memo_AI.shortcut` | Versioni firmate (`shortcuts sign --mode anyone`) da importare |
 | `GUIDA_INSTALLAZIONE.md` | Passi sull'iPhone |
 
 Rigenerazione dopo una modifica al prompt o al modello:
 ```
 python3 prompt/build_request_template.py
 python3 shortcut/genera_shortcut.py gpt-4.1-mini
+shortcuts sign --mode anyone --input shortcut/Memo_AI_Motore_unsigned.shortcut --output shortcut/Memo_AI_Motore.shortcut
 shortcuts sign --mode anyone --input shortcut/Memo_AI_unsigned.shortcut --output shortcut/Memo_AI.shortcut
+# test sul Mac, dopo aver sostituito il Motore:
+shortcuts run Memo_AI_Motore --input-path test/audio/prova1.m4a --output-path nota.txt
 ```
 
 ## Stato e verifiche
@@ -116,6 +124,14 @@ Nessuna.
   - **Causa reale:** riprodotta sul Mac con `NSDataDetector`, via JXA (`osascript -l JavaScript`). Il riconoscimento link di Apple scarta una stringa base64 lunga e senza interruzioni.
   - **Correzione:** base64 «url-safe» (`+`→`-`, `/`→`_`, senza `=`), spezzato ogni 48 caratteri con un punto (regex `(.{48})` → `$1.`). Il visualizzatore ignora i punti.
   - **Verifica:** con gli stessi motori di Apple (NSRegularExpression + NSDataDetector) il link è riconosciuto completo, sia sulla mappa breve (481 caratteri) sia su quella lunga (1.174). La mappa si apre nel visualizzatore.
+- **Accenti rovinati e testo «sbagliato» (2026-11-23).** Sull'iPhone il titolo usciva «giovedec» al posto di «giovedì». Riprodotto sul Mac con `shortcuts run Memo_AI_Motore`: nella struttura «venerdì» diventava «venerd ec» e i «•» sparivano.
+  - **Causa:** l'azione «Ottieni dizionario da input» (`is.workflow.actions.detect.dictionary`) rovina i caratteri non ASCII. La risposta di OpenAI era corretta, come verificato con lo script. La stessa azione serviva anche a costruire le richieste, quindi probabilmente arrivava rovinato anche il prompt.
+  - **Correzione:** le richieste si costruiscono con l'azione nativa «Dizionario» (`is.workflow.actions.dictionary`). La struttura non è più JSON ma testo in tre parti separate da `@@@`. Il comando verifica che le parti siano esattamente 3, altrimenti restituisce ERRORE.
+  - **Regola:** in Comandi Rapidi non usare mai «Ottieni dizionario da input» su testo con caratteri accentati.
+- **Audio senza voce.** La trascrizione è un testo vuoto, ma per Comandi Rapidi quel testo «ha un valore», quindi il comando andava avanti e OpenAI rispondeva con un errore tecnico in due pezzi.
+  - **Correzione:** si contano le parole trascritte; se sono zero, il Motore restituisce «ERRORE: nessuna voce riconosciuta». Gli errori escono sempre come un unico testo.
+- **Prima esecuzione vuota.** La prima esecuzione dopo una sostituzione del Motore ha restituito un risultato vuoto, poi non è più successo. Ipotesi: la richiesta di permesso di rete. Non verificata.
+- **Vocabolario troppo aggressivo.** Nel memo lungo un «Ciao» è diventato «Claude». È un difetto minore, da tenere d'occhio.
 - Il database dei Comandi Rapidi (`~/Library/Shortcuts`) non è leggibile dal terminale per via della protezione TCC. Gli identificativi di Note sono stati presi dai metadati App Intents di Note.app.
 
 ## Cosa NON è stato toccato

@@ -93,6 +93,15 @@ def blocchi(trascrizione):
         yield blocco.strip()
 
 
+def dividi_struttura(t):
+    """Stessa logica del Comando Rapido: divide sul separatore @@@ e
+    pretende esattamente tre parti (titolo, struttura, mappa)."""
+    parti = [x.strip() for x in t.split("@@@")]
+    if len(parti) != 3 or not all(parti):
+        raise ValueError(f"risposta struttura non in 3 parti: {t[:300]!r}")
+    return {"titolo": parti[0], "struttura": parti[1], "mappa_markdown": parti[2]}
+
+
 def pulisci(trascrizione, modello, key):
     uso = {"input_tokens": 0, "output_tokens": 0, "chiamate": 0}
     pulito = []
@@ -107,7 +116,7 @@ def pulisci(trascrizione, modello, key):
     uso["input_tokens"] += u.get("input_tokens", 0)
     uso["output_tokens"] += u.get("output_tokens", 0)
     uso["chiamate"] += 1
-    dati = json.loads(t)
+    dati = dividi_struttura(t)
     dati["testo_pulito"] = testo_pulito
     return dati, uso
 

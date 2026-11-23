@@ -1,30 +1,3 @@
 {
-  "instructions": "Ricevi il testo di un memo vocale in italiano, già ripulito da intercalari ed errori.\n\nProduci tre campi:\n\n1. titolo: massimo 8 parole, che dica di cosa parla il memo. Niente virgolette, niente punto finale.\n\n2. struttura: il contenuto organizzato come memo, in testo semplice (NON markdown: niente #, niente **). Usa questo schema:\n   SINTESI\n   una o due frasi, in prosa.\n\n   PUNTI CHIAVE\n   • punto\n   • punto\n\n   DA FARE\n   • azione (con chi e quando, se detto)\n\n   DOMANDE APERTE\n   • domanda\n\n   In DA FARE metti SOLO azioni che chi parla dice esplicitamente di dover fare (\"devo\", \"bisogna\", \"chiamare\", \"mandare\"...). In DOMANDE APERTE SOLO dubbi o domande espressi esplicitamente e rimasti senza risposta. Non dedurre compiti o domande dal contenuto. Se una sezione non ha contenuto, NON scriverla affatto: niente intestazione, niente \"(nessuna...)\".\n\n3. mappa_markdown: una mappa mentale in markdown per markmap. Una sola radice \"# \" con il titolo, poi rami \"## \" per i temi principali e sotto-elenchi \"- \" per i dettagli (massimo 3 livelli sotto la radice). Etichette brevi, massimo 6 parole ciascuna. Solo contenuti presenti nel memo.\n\nQuesti nomi vanno scritti esattamente così: Claude, Claude Code, Cowork, ChatGPT, Gemini, DeepSeek, Perplexity, NotebookLM, Cursor, Higgsfield, Wispr Flow, MCP, ERP, CRM, prompt, AI-utati, Time Machine.",
-  "text": {
-    "format": {
-      "type": "json_schema",
-      "name": "memo_vocale",
-      "strict": true,
-      "schema": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "titolo",
-          "struttura",
-          "mappa_markdown"
-        ],
-        "properties": {
-          "titolo": {
-            "type": "string"
-          },
-          "struttura": {
-            "type": "string"
-          },
-          "mappa_markdown": {
-            "type": "string"
-          }
-        }
-      }
-    }
-  }
+  "instructions": "Ricevi il testo di un memo vocale in italiano, già ripulito da intercalari ed errori.\n\nRispondi con ESATTAMENTE tre parti, separate da una riga che contiene solo @@@ (tre chiocciole). Niente altro prima, in mezzo o dopo: niente premesse, niente etichette come \"Titolo:\", niente blocchi di codice.\n\nPARTE 1 — il titolo: una sola riga, massimo 8 parole, che dica di cosa parla il memo. Niente virgolette, niente punto finale.\n\nPARTE 2 — la struttura: il contenuto organizzato come memo, in testo semplice (NON markdown: niente #, niente **). Usa questo schema:\nSINTESI\nuna o due frasi, in prosa.\n\nPUNTI CHIAVE\n• punto\n• punto\n\nDA FARE\n• azione (con chi e quando, se detto)\n\nDOMANDE APERTE\n• domanda\n\nIn DA FARE metti SOLO azioni che chi parla dice esplicitamente di dover fare (\"devo\", \"bisogna\", \"chiamare\", \"mandare\"...). In DOMANDE APERTE SOLO dubbi o domande espressi esplicitamente e rimasti senza risposta. Non dedurre compiti o domande dal contenuto. Se una sezione non ha contenuto, NON scriverla affatto: niente intestazione, niente \"(nessuna...)\".\n\nPARTE 3 — la mappa mentale in markdown per markmap: una sola radice \"# \" con il titolo, poi rami \"## \" per i temi principali e sotto-elenchi \"- \" per i dettagli (massimo 3 livelli sotto la radice). Etichette brevi, massimo 6 parole ciascuna. Solo contenuti presenti nel memo.\n\nEsempio di forma (contenuto inventato):\nRiunione budget marketing\n@@@\nSINTESI\nBisogna rivedere il budget del trimestre.\n\nDA FARE\n• Mandare il file a Paola entro lunedì\n@@@\n# Riunione budget marketing\n## Budget\n- Revisione trimestrale\n## Azioni\n- File a Paola lunedì\n\nQuesti nomi vanno scritti esattamente così: Claude, Claude Code, Cowork, ChatGPT, Gemini, DeepSeek, Perplexity, NotebookLM, Cursor, Higgsfield, Wispr Flow, MCP, ERP, CRM, prompt, AI-utati, Time Machine."
 }
