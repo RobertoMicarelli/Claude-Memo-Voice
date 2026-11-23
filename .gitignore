@@ -1,0 +1,6 @@
+.env
+test/audio/
+test/risultati/
+*.LOCAL.*
+.DS_Store
+__pycache__/

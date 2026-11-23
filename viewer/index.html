@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mappa memo</title>
+<style>
+  html, body { margin: 0; height: 100%; background: #fff; font-family: -apple-system, system-ui, sans-serif; }
+  #mappa { width: 100vw; height: 100vh; display: block; }
+  #msg { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 24px; color: #555; text-align: center; }
+  @media (prefers-color-scheme: dark) {
+    html, body { background: #111; }
+    #msg { color: #aaa; }
+    .markmap { color: #eee; }
+  }
+</style>
+</head>
+<body>
+<svg id="mappa"></svg>
+<div id="msg"></div>
+
+<!-- La mappa arriva nel frammento dell'URL (#...), in markdown codificato base64.
+     Il frammento non viene mai inviato al server: il contenuto resta sul telefono. -->
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-lib@0.18.12/dist/browser/index.iife.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/markmap-view@0.18.12/dist/browser/index.js"></script>
+<script>
+  function errore(testo) {
+    const m = document.getElementById('msg');
+    m.textContent = testo;
+    m.style.display = 'flex';
+  }
+
+  function decodifica(frammento) {
+    let b64 = decodeURIComponent(frammento).replace(/\s+/g, '').replace(/-/g, '+').replace(/_/g, '/');
+    while (b64.length % 4) b64 += '=';
+    const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+    return new TextDecoder('utf-8').decode(bytes);
+  }
+
+  try {
+    const frammento = location.hash.slice(1);
+    if (!frammento) throw new Error('vuoto');
+    const md = decodifica(frammento);
+    const titolo = (md.match(/^#\s+(.+)$/m) || [])[1];
+    if (titolo) document.title = titolo;
+    const { Transformer } = window.markmap;
+    const { root } = new Transformer().transform(md);
+    window.markmap.Markmap.create('#mappa', { autoFit: true }, root);
+  } catch (e) {
+    errore(e.message === 'vuoto'
+      ? 'Nessuna mappa nel link.'
+      : 'Il link della mappa non è leggibile (forse è stato troncato).');
+  }
+</script>
+</body>
+</html>
