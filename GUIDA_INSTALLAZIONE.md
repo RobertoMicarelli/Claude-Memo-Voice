@@ -29,4 +29,4 @@ Tieni premuto sulla schermata di blocco → **Personalizza** → **Schermata di 
 - Compare il menu delle cartelle: dopo 5–10 secondi per un memo breve, circa 1 minuto per un memo di 15 minuti. Il tempo dipende dai blocchi da ripulire. «Non salvare» mostra solo il risultato.
 
 ## Cosa contiene la nota
-Titolo, poi la struttura (sintesi, punti chiave, cose da fare, domande aperte), poi il link alla mappa mentale e infine il testo completo ripulito.
+Titolo, poi la struttura (sintesi, punti chiave, cose da fare, domande aperte), poi il link **«Apri la mappa mentale»** e infine il testo completo ripulito. Il link apre la mappa interattiva in Safari.

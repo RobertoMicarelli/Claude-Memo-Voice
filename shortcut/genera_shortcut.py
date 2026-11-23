@@ -218,11 +218,43 @@ B64 = (uid(), "Mappa base64")
 add("is.workflow.actions.base64encode", {
     "WFInput": var(*MM), "WFEncodeMode": "Encode", "WFBase64LineBreakMode": "None",
     "CustomOutputName": B64[1]}, B64[0])
-NB = (uid(), "Testo nota")
+# La nota è rich text costruito da HTML: il link alla mappa è un vero <a href>.
+# In testo semplice Note riconosceva solo "https://.../viewer" e perdeva il "#...".
+
+
+def sostituisci(ingresso, cerca, con, nome, regex=False):
+    u = (uid(), nome)
+    add("is.workflow.actions.text.replace", {
+        "WFInput": testo(ingresso), "WFReplaceTextFind": cerca,
+        "WFReplaceTextReplace": testo(con) if isinstance(con, tuple) else con,
+        "WFReplaceTextRegularExpression": regex, "WFReplaceTextCaseSensitive": True,
+        "CustomOutputName": nome}, u[0])
+    return u
+
+
+SEGNAPOSTO = "§MAPPA§"
+P = (uid(), "Testo semplice")
 add("is.workflow.actions.gettext", {
-    "WFTextActionText": testo(TIT, "\n\n", ST, "\n\nMAPPA MENTALE\n", V, "#", B64,
-                              "\n\nTESTO COMPLETO\n", TP),
-    "CustomOutputName": NB[1]}, NB[0])
+    "WFTextActionText": testo(TIT, "\n\n", ST, f"\n\n{SEGNAPOSTO}\n\nTESTO COMPLETO\n", TP),
+    "CustomOutputName": P[1]}, P[0])
+P1 = sostituisci(P, "&", "&amp;", "Testo html 1")
+P2 = sostituisci(P1, "<", "&lt;", "Testo html 2")
+P3 = sostituisci(P2, ">", "&gt;", "Testo html 3")
+P4 = sostituisci(P3, "\n", "<br>", "Testo html 4")
+VC = sostituisci(V, r"\s+", "", "Indirizzo pulito", regex=True)
+BC = sostituisci(B64, r"\s+", "", "Mappa base64 pulita", regex=True)
+LINK = (uid(), "Link mappa")
+add("is.workflow.actions.gettext", {
+    "WFTextActionText": testo('<b>MAPPA MENTALE</b><br><a href="', VC, "#", BC,
+                              '">Apri la mappa mentale</a>'),
+    "CustomOutputName": LINK[1]}, LINK[0])
+P5 = sostituisci(P4, SEGNAPOSTO, LINK, "Testo html 5")
+H = (uid(), "HTML nota")
+add("is.workflow.actions.gettext", {
+    "WFTextActionText": testo('<html><head><meta charset="utf-8"></head><body>', P5, "</body></html>"),
+    "CustomOutputName": H[1]}, H[0])
+NB = (uid(), "Testo nota")
+add("is.workflow.actions.getrichtextfromhtml", {"WFHTML": testo(H), "CustomOutputName": NB[1]}, NB[0])
 
 # --- 5. Menu cartella --------------------------------------------------------------
 g = uid()
