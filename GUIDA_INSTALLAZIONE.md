@@ -1,32 +1,40 @@
-# Memo AI — installazione sull'iPhone
+# Memo AI — installazione
 
-## 1. Importa il Comando Rapido
-1. Manda `shortcut/Memo_AI.shortcut` all'iPhone (AirDrop, oppure iCloud Drive → app File → tocca il file).
-2. Tocca **Aggiungi comando rapido**. Ti chiede:
-   - **API key di OpenAI**: incollala qui. Resta solo dentro il Comando Rapido.
-   - **Indirizzo del visualizzatore mappe**: lascia il valore proposto (`https://robertomicarelli.github.io/Claude-Memo-Voice/viewer/`).
+Due Comandi Rapidi, sincronizzati tra Mac e iPhone tramite iCloud:
 
-## 2. Aggiungi le 5 azioni «Crea nota» (una volta sola)
-iOS non permette di scegliere la cartella di Note da una variabile, quindi va fatto a mano.
-Apri il Comando Rapido. In fondo c'è il menu «Dove salvo il memo?». In ognuno dei rami Casa, Lavoro, Tempo Libero, Idee e Varie c'è un commento «AGGIUNGI QUI».
-**Primo ramo (Lavoro):**
-1. Tocca **Cerca azioni**, in basso, e scrivi `Crea nota`.
-2. Tieni premuto il risultato **Crea nota** (icona gialla di Note) e, senza staccare il dito, trascinalo subito sotto il commento giallo del ramo **Lavoro**, prima della riga «Tempo Libero». Se lo tocchi soltanto, finisce in fondo al comando: in quel caso tienilo premuto e trascinalo su.
-3. Nell'azione tocca il campo blu del contenuto (il testo della nota), poi **Seleziona variabile**, poi tocca più in alto l'azione **Testo nota**, quella che inizia con Titolo e Struttura.
-4. Tocca la freccia **>** dell'azione per vedere tutti i campi. Tocca **Cartella** e scegli **Lavoro**. Lascia **Nome** vuoto (il titolo è la prima riga della nota) e disattiva **Apri in caso di esecuzione**.
-5. Facoltativo: elimina il commento giallo con la **X**.
+| Comando | Cosa fa | Quando si reimporta |
+|---|---|---|
+| **Memo_AI_Motore** | Riceve l'audio, lo trascrive, lo pulisce e restituisce il testo della nota con il link alla mappa | A ogni correzione. Si fa sul Mac: **Sostituisci** e poi incolla la chiave API |
+| **Memo_AI** | Registra, chiama il Motore, mostra il menu delle cartelle e salva in Note | Una volta sola |
 
-**Gli altri 4 rami, più in fretta:** tieni premuta l'azione «Crea nota» appena fatta → **Duplica**. Trascina la copia sotto il commento di **Tempo Libero** e cambia solo la cartella. Ripeti per **Idee**, **Varie** e **Casa**.
+## 1. Motore (sul Mac)
+1. Apri `shortcut/Memo_AI_Motore.shortcut` e scegli **Aggiungi comando rapido**, oppure **Sostituisci** se esiste già.
+2. Incolla la **API key di OpenAI** e lascia l'indirizzo del visualizzatore così com'è.
+3. Test da Terminale:
+   ```
+   shortcuts run Memo_AI_Motore --input-path test/audio/prova1.m4a --output-path nota.txt
+   ```
 
-Le 5 cartelle devono esistere già in Note. Se sono sottocartelle, come quelle dentro NOTE-PEBBLE, all'inizio il selettore mostra solo le cartelle principali: usa il campo **Cerca** in alto e scrivi il nome, per esempio `IDEE`.
+## 2. Comando principale (una volta sola, comodo sul Mac)
+1. Apri `shortcut/Memo_AI.shortcut`. Se esiste già un Memo_AI, scegli **Sostituisci**.
+2. Controlla l'azione **Esegui comando rapido**: deve indicare **Memo_AI_Motore**. Se è vuota, cliccaci sopra e sceglilo.
+3. Nel menu «Dove salvo il memo?» ogni ramo (Casa, Lavoro, Tempo Libero, Idee, Varie) ha un commento «AGGIUNGI QUI». Sotto ciascun commento:
+   - aggiungi **Crea nota** (app Note);
+   - **Contenuto:** la variabile **Testo nota**, cioè l'output di «Esegui comando rapido»;
+   - **Nome:** vuoto, perché il titolo è la prima riga della nota;
+   - **Cartella:** scegli la cartella del ramo. Per le sottocartelle di NOTE-PEBBLE usa il campo **Cerca** nel selettore;
+   - **Apri in caso di esecuzione:** disattivato.
 
-## 3. Pulsante sulla schermata di blocco (iOS 18 o successivi)
-Tieni premuto sulla schermata di blocco → **Personalizza** → **Schermata di blocco**. Tocca uno dei due pulsanti in basso → **Comandi Rapidi** → **Memo AI**.
+   Fai la prima a mano e le altre con **Duplica**, cambiando solo la cartella.
 
-## 4. Primo avvio
-- Concedi il **microfono** e l'accesso a **api.openai.com** quando te li chiede, scegliendo «Consenti sempre».
+## 3. Pulsante sulla schermata di blocco (iPhone, iOS 18 o successivi)
+Tieni premuto sulla schermata di blocco → **Personalizza** → **Schermata di blocco** → tocca un pulsante in basso → **Comandi Rapidi** → **Memo_AI**.
+
+## 4. Uso
+- Alla prima esecuzione concedi il **microfono** e l'accesso a **api.openai.com**, scegliendo «Consenti sempre».
 - La registrazione parte subito. Per fermarla tocca lo schermo.
-- Compare il menu delle cartelle: dopo 5–10 secondi per un memo breve, circa 1 minuto per un memo di 15 minuti. Il tempo dipende dai blocchi da ripulire. «Non salvare» mostra solo il risultato.
+- Dopo 5–10 secondi per un memo breve, circa 1 minuto per un memo di 15 minuti, compare il menu delle cartelle. «Non salvare» mostra solo il risultato.
+- Se qualcosa va storto compare un messaggio che inizia con **ERRORE:**, per esempio «nessuna voce riconosciuta nella registrazione».
 
 ## Cosa contiene la nota
-Titolo, poi la struttura (sintesi, punti chiave, cose da fare, domande aperte), poi il link alla mappa mentale (lungo, con dei punti: è normale) e infine il testo completo ripulito. Il link apre la mappa interattiva in Safari.
+Titolo, poi la struttura (sintesi, punti chiave, cose da fare, domande aperte), poi il link alla mappa mentale e infine il testo completo ripulito. Il link è lungo e pieno di punti, ed è normale. La mappa si apre in Safari, sempre su sfondo bianco.
